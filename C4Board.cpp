@@ -105,7 +105,7 @@ void C4Board::play(){
     else {
         cout << "\nAI (o) is thinking..." << endl;
         exportBoardToFile();
-        system("python3 agent_current.py");
+        system("python3 agent.py");
         
         ifstream inFile("move.txt");
         if (inFile >> choice) {

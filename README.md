@@ -13,7 +13,7 @@ Connect 4 playable against an agent that uses a policy-based system.
 ├── main.cpp            # Main program entry point
 ├── makefile            # Build instructions
 ├── README.md           # Project documentation
-├── agent_current.py    # AI agent playing
+├── agent.py            # AI agent playing
 └── future.py           # Smart play strategies
 ```
 
