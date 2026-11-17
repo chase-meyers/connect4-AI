@@ -1,4 +1,4 @@
-# c4-reinforcement-learning
+# connect4-AI
 
 Connect 4 playable against an agent that uses a policy-based system.
 
