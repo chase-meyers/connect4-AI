@@ -1,23 +1,22 @@
-# c4-reinforcement-learning
+# connect4-AI
 
-Connect 4 playable against an agent that uses reinforcement learning to get better at playing.
+Connect 4 playable against an agent that uses a policy-based system.
 
 ## Project Structure
 
-*As of October 15, 2026*
+*Originated on October 15, 2026, updated on Nov 8 *
 ```text
-c4-reinforcement-learning/
-├── C4Board.cpp       # Connect Four board implementation
-├── C4Board.h         # Connect Four board header
-├── C4Col.cpp         # Column implementation
-├── C4Col.h           # Column header
-├── main.cpp          # Main program entry point
-├── makefile          # Build instructions
-└── README.md         # Project documentation
+├── C4Board.cpp         # Connect Four board implementation
+├── C4Board.h           # Connect Four board header
+├── C4Col.cpp           # Column implementation
+├── C4Col.h             # Column header
+├── main.cpp            # Main program entry point
+├── makefile            # Build instructions
+├── README.md           # Project documentation
+└── agent.py            # AI agent playing
 ```
 
 ## Planned Improvements
 
-1. Agent interaction dynamics
-2. Strategies
-3. Implementation outcomes
+1. Agent has been merged with C++ code and tested successfully
+2. Agent needs more rules/policies to improve logic of AI

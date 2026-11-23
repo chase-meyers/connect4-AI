@@ -2,17 +2,20 @@
 #include "C4Col.h"
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 //setting the initiation 
-C4Board::C4Board(){
-      num_col = 7; 
+C4Board::C4Board(int cols, int rows){
+      num_col = cols; 
+      board = vector<C4Col>(num_col, C4Col(rows));
 }
 
 void C4Board::display(){
+    int max_rows = board[0].getMaxDiscs();
 
-    for( int row = board[0].getMaxDiscs() - 1; row >= 0; row-- ){
-        for( int col = 0; col < 7; col++ ){
+    for( int row = max_rows - 1; row >= 0; row-- ){
+        for( int col = 0; col < num_col; col++ ){
             cout  << board[col].getDisc(row) << " | ";
         }
         cout << endl;
@@ -25,7 +28,7 @@ void C4Board::display(){
 
     // print column numbers
     for (int col = 0; col < num_col; col++) {
-        cout << col << " " ;
+        cout << col % 10 << " " ;
     }
     cout << endl;
 }
@@ -80,53 +83,68 @@ char C4Board::checkwin() {
     return ' ';  // no winner
 }
 
-
 void C4Board::play(){
    int choice = 0;
-   int counter = 0;
+   int counter = 1; // Starts at 1 (Odd = Human 'x', Even = AI 'o')
    while (true) {    
 
     display(); 
 
-    char playerturn = (counter % 2 == 0) ? 'x' : 'o';
+    // Determine whose turn it is based on counter parity
+    char playerturn = (counter % 2 != 0) ? 'x' : 'o';
    
-    cout << "Player's " << playerturn << "'s turn: choose the colum to add disc, or -1 to end the game"<< counter << endl; 
-  
-    cin >> choice;      // player's input 
+    if (playerturn == 'x') {
+        cout << "Player x's turn: choose column (0-6), or -1 to end: "; 
+        cin >> choice;      
 
-    // check the validity of input
-    if (choice == -1) {                                    //input to end the game by -1
-        cout << "input -1: end the grame" << endl; 
-        break;
+        if (choice == -1) {                                    
+            cout << "input -1: end the game" << endl; 
+            break;
+        }
+    } 
+    else {
+        cout << "\nAI (o) is thinking..." << endl;
+        exportBoardToFile();
+        system("python3 agent.py");
+        
+        ifstream inFile("move.txt");
+        if (inFile >> choice) {
+            inFile.close();
+        } else {
+            choice = 0; 
+        }
+        cout << "AI chose column: " << choice << endl;
     }
 
-    if (choice < 0 || choice >= num_col){                 //input out of boundary to restart the loop
+    if (choice < 0 || choice >= num_col){                 
         cout << "invalid column number" << endl;
-        continue;
+        continue; // <--- WARNING: If it hits this, counter++ is skipped!
     }
 
-//    cout << "board: " << board[choice] << endl;
     board[choice].addDisc(playerturn);
    
-//using checkwin to declare win
     char winner = checkwin();
     if (winner != ' ') {
         display();
-        cout << "\n*****************************\n";
-        cout << "🎉 Congratulations! Player " << winner << " wins! 🎉\n";
-        cout << "\n*****************************\n";
+        cout << "\nCongratulations! Player " << winner << " wins!\n";
         return;
     }
-    else{
-        cout << "No winners, tied" << endl;
-    }
-//    //continue to next player and looping
 
-    counter ++; 
-    }
+    counter++; // <--- Must execute every successful turn to switch players!
+   }
 }
 
-
+   
+void C4Board:: exportBoardToFile(){
+    ofstream outFile("board.txt");
+    for (int row = board[0].getMaxDiscs() -1; row >= 0; row -- ){
+        for (int col = 0; col < num_col; col++){
+            outFile << board[col].getDisc(row) << "  ";
+        }
+        outFile << endl;
+    }
+    outFile.close(); 
+}
 
 
 
